@@ -11,16 +11,17 @@ from bs4 import Comment
 
 playerDict = {}
 playerDict['Jose Barea'] = 'J.J. Barea'
-playerDict['Tim Hardaway'] = 'Tim Hardaway Jr.'
-playerDict['Luc Mbah a Moute'] = 'Luc Richard Mbah a Moute'
+playerDict['Tim Hardaway Jr.'] = 'Tim Hardaway'
+playerDict['Luc Richard Mbah a Moute'] = 'Luc Mbah a Moute'
 playerDict['JaKarr Sampson'] = 'Jakarr Sampson'
-playerDict['Patrick Mills'] = 'Patty Mills'
+playerDict['Patty Mills'] = 'Patrick Mills'
 playerDict['Glen Rice'] = 'Glen Rice Jr.'
 playerDict['Larry Drew'] = 'Larry Drew II'
 playerDict['John Lucas'] = 'John Lucas III'
-playerDict['Glenn Robinson'] = 'Glenn Robinson III'
+playerDict['Glenn Robinson III'] = 'Glenn Robinson'
 playerDict['Louis Williams'] = 'Lou Williams'
 playerDict['Roy Devyn Marble'] = 'Devyn Marble'
+playerDict['Joe Young'] = 'Joseph Young'
 
 teamTable={}
 teamTable['Atlanta Hawks']='Atl'       
@@ -118,6 +119,15 @@ teamlist['TOR']='Tor'
 teamlist['MEM']='Mem'
 teamlist['CHO']='Cha'
 
+def myFix(player):
+    if player not in playerList:
+        if player in playerDict:
+            print(player)
+            player = playerDict[player]
+            print(player)
+
+    return(player)
+
 # calculates time played for an observation
 def getTimeDiff(cur, past, quarter):
     cur = int(cur[:cur.index(':')])*60 + (60*(4 - quarter)*12) + int(cur[cur.index(':')+1:])
@@ -160,8 +170,7 @@ def checkObs(quarter, pmTable):
                 tmp2Start = tmp2Start.next_sibling.next_sibling
             if toCheck1.string.encode("ascii","ignore") != '' or toCheck2.string.encode("ascii","ignore") != '':
                 tmpPlayer = playerTag.span.string.encode("ascii","ignore")
-                if tmpPlayer in playerDict:
-                    tmpPlayer = playerDict[tmpPlayer]
+                tmpPlayer = myFix(tmpPlayer)
                 obs[team].append(playerList[tmpPlayer][0][0])
             playerTag = playerTag.next_sibling.next_sibling.next_sibling.next_sibling
         teamTag = teamTag.next_sibling.next_sibling
@@ -177,7 +186,7 @@ for htmlFile in dirList:
     hometeam = teamdict[htmlFile[htmlFile.index('.')-2:htmlFile.index('.')]]
     Hteam = teamlist[hometeam]
     Vteam = ""
-    pmFile = BeautifulSoup(open('/home/hbhat/Dropbox/nbaproj/playoffs2016/playoffPM/' + rawdate + hometeam + ".html"),"html.parser") 
+    pmFile = BeautifulSoup(open('/home/hbhat/Dropbox/nbaproj/playoffs2016/playoffPM/' + rawdate + "0" + hometeam + ".html"),"html.parser") 
     pmTable = pmFile.body.div.div.next_sibling.next_sibling.next_sibling.next_sibling.table.tr.td.div.next_sibling.div.next_sibling.next_sibling
     # get pbpFile
     fullfile = open('/home/hbhat/Dropbox/nbaproj/playoffs2016/fixedPBP/'+htmlFile)
@@ -255,6 +264,7 @@ for htmlFile in dirList:
         # if starting lineup add player to obs
         if "Starting Lineup" in temp:
             player = temp[temp.index('-')+2:]
+            player = myFix(player)
             obs[team].append(playerList[player][0][0])
         # move to next line
         if upsideDownFlag == 0:
@@ -347,7 +357,7 @@ for htmlFile in dirList:
             quarter = thisQuarter
             tmpObs = checkObs(quarter, pmTable)
             # if player roster has changed, record obs and update
-            if tmpObs != obs:
+            if (tmpObs != obs) and (tmpObs != {}):
                 timeDiff = getTimeDiff("12:00",time,quarter)
                 time = ("12:00",quarter)
                 scoreDiff = 0
@@ -379,8 +389,7 @@ for htmlFile in dirList:
 	if 'foul committed by ' in thisCall:
 	    #print thisCall
             tmppPlayer = thisCall[thisCall.index('by ')+3:len(thisCall)-1]
-            if tmppPlayer in playerDict:
-                tmppPlayer = playerDict[tmppPlayer]
+            tmppPlayer = myFix(tmppPlayer)
 	    try:
 	        tmpPlayer = playerList[tmppPlayer][0][0]
 	        fouls[thisTeam][tmpPlayer] += 1
@@ -395,9 +404,9 @@ for htmlFile in dirList:
         # Substitution: record obs and create new obs to record
         if "Substitution: " in thisCall:
             playerIN = thisCall[thisCall.index(': ')+2:thisCall.index(' in ')]
-            if playerIN in playerDict:
-                playerIN = playerDict[playerIN]
+            playerIN = myFix(playerIN)
             playerOUT = thisCall[thisCall.index(' for ')+5:len(thisCall)-1]
+            playerOUT = myFix(playerOUT)
             if playerList[playerIN][0][0] not in obs[thisTeam]:
                 timeDiff = getTimeDiff(thisTime,time,quarter)
                 time = (thisTime,quarter)

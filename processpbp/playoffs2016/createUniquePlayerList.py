@@ -47,6 +47,18 @@ for i in range(df.shape[0]):
         playerdict[thisrow['Player']].append((playernum,oldteam[thisrow['Tm']]))
 
 
-pickle.dump(playerdict, open("uniquePlayerList2016","wb"))
+# This dude played in China during the regular season,
+# and then joined the Miami Heat for the playoffs!
+playerdict['Dorell Wright'] = []
+playerdict['Dorell Wright'].append((playernum,'Mia'))
+playernum += 1
+
+# This dude played in the D-Leagues all season,
+# and then joined the Boston Celtics for the playoffs!
+playerdict['John Holland'] = []
+playerdict['John Holland'].append((playernum,'Bos'))
+playernum += 1
+
+pickle.dump(playerdict, open("uniquePlayerList2016.pickle","wb"))
 
 
