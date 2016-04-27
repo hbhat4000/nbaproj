@@ -1,0 +1,8 @@
+To run these R codes, you need to have two inputs:
+1) rawdata.csv
+2) pL2016.csv
+
+These files can be produced using the Python scripts in nbaproj/processpbp/
+
+Once you have the files listed above, take a look at assembly.R
+
