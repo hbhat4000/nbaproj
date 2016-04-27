@@ -357,7 +357,7 @@ for htmlFile in dirList:
             quarter = thisQuarter
             tmpObs = checkObs(quarter, pmTable)
             # if player roster has changed, record obs and update
-            if (tmpObs != obs) and (tmpObs != {}):
+            if (tmpObs != obs):
                 timeDiff = getTimeDiff("12:00",time,quarter)
                 time = ("12:00",quarter)
                 scoreDiff = 0

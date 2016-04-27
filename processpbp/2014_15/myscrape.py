@@ -168,7 +168,7 @@ def checkObs(quarter, pmTable):
     return obs
 
 playerList = pickle.load(open('./uniquePlayerList.pickle','rb'))
-dirList = os.listdir('/home/hbhat/Documents/nbaproj/fixedpbpfiles/')
+dirList = os.listdir('/home/hbhat/Documents/nbaproj/fixedpbpfiles2015/')
 
 for htmlFile in dirList:
     print "Starting: ",htmlFile
@@ -177,10 +177,10 @@ for htmlFile in dirList:
     hometeam = teamdict[htmlFile[htmlFile.index('.')-2:htmlFile.index('.')]]
     Hteam = teamlist[hometeam]
     Vteam = ""
-    pmFile = BeautifulSoup(open('/home/hbhat/Dropbox/nbaproj/pmFiles/' + rawdate + hometeam + ".html"),"html.parser") 
+    pmFile = BeautifulSoup(open('/home/hbhat/Dropbox/nbaproj/pmFiles2015/' + rawdate + hometeam + ".html"),"html.parser") 
     pmTable = pmFile.body.div.div.next_sibling.next_sibling.next_sibling.next_sibling.table.tr.td.div.next_sibling.div.next_sibling.next_sibling
     # get pbpFile
-    fullfile = open('/home/hbhat/Documents/nbaproj/fixedpbpfiles/'+htmlFile)
+    fullfile = open('/home/hbhat/Documents/nbaproj/fixedpbpfiles2015/'+htmlFile)
     alllines = fullfile.read()
     ffstart = alllines.find('<!--START SHORT PBP')
     ffalmostend = alllines.find('TITLE TEAMS')
