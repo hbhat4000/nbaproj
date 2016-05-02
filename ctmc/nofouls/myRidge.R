@@ -16,7 +16,8 @@ for (teamT in names(team_obs))
 	my_LU = team_lineups[[teamT]]
 
 	n_lineups = dim(my_LU)[1]
-	ridgeDF = matrix(0,82,n_lineups+1)
+        numgamesplayed = length(unique(my_T$rawdate))
+	ridgeDF = matrix(0,numgamesplayed,n_lineups+1)
 	times_starting = rep(0,n_lineups)
 
 	lu = as.integer(sort(my_T[1,4:8]))
